@@ -17,20 +17,23 @@ const port = process.env.PORT || 3001;
 var allowedOrigins = ['https://myblog-api-xjlk.onrender.com/',
                       'https://myblog-client-eight.vercel.app/'];
 
+
+app.use(cors({ origin:allowedOrigins, credentials: true }))
+
 // app.use(cors({credentials:true,origin:allowedOrigins}));
 
-app.use(function(req, res, next) {
-      // res.header("Access-Control-Allow-Origin", "*");
-      const allowedOrigins = allowedOrigins;
-      const origin = req.headers.origin;
-      if (allowedOrigins.includes(origin)) {
-           res.setHeader('Access-Control-Allow-Origin', origin);
-      }
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-      res.header("Access-Control-Allow-credentials", true);
-      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-      next();
-    });
+// app.use(function(req, res, next) {
+//       // res.header("Access-Control-Allow-Origin", "*");
+//       const allowedOrigins = allowedOrigins;
+//       const origin = req.headers.origin;
+//       if (allowedOrigins.includes(origin)) {
+//            res.setHeader('Access-Control-Allow-Origin', origin);
+//       }
+//       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//       res.header("Access-Control-Allow-credentials", true);
+//       res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+//       next();
+//     });
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
