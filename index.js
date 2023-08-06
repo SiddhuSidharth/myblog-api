@@ -17,7 +17,20 @@ const port = process.env.PORT || 3001;
 var allowedOrigins = ['https://myblog-api-xjlk.onrender.com/',
                       'https://myblog-client-eight.vercel.app/'];
 
-app.use(cors({credentials:true,origin:allowedOrigins}));
+// app.use(cors({credentials:true,origin:allowedOrigins}));
+
+app.use(function(req, res, next) {
+      // res.header("Access-Control-Allow-Origin", "*");
+      const allowedOrigins = allowedOrigins;
+      const origin = req.headers.origin;
+      if (allowedOrigins.includes(origin)) {
+           res.setHeader('Access-Control-Allow-Origin', origin);
+      }
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+      res.header("Access-Control-Allow-credentials", true);
+      res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+      next();
+    });
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
@@ -29,12 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/register', async (req,res) => {
-     res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  
+   
   const {username,password} = req.body;
   try{
     const userDoc = await User.create({
@@ -49,11 +57,7 @@ app.post('/register', async (req,res) => {
 });
 
 app.post('/login', async (req,res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+     
   
   const {username,password} = req.body;
   const userDoc = await User.findOne({username});
@@ -73,11 +77,7 @@ app.post('/login', async (req,res) => {
 });
 
 app.get('/profile', (req,res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+    
   
   console.log("ReQ",req);
   const {token} = req.cookies;
@@ -88,22 +88,12 @@ app.get('/profile', (req,res) => {
 });
 
 app.post('/logout', (req,res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  
+    
   res.cookie('token', '').json('ok');
 });
 
 app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  
+     
   const {originalname,path} = req.file;
   const parts = originalname.split('.');
   const ext = parts[parts.length - 1];
@@ -126,11 +116,7 @@ app.post('/post', uploadMiddleware.single('file'), async (req,res) => {
 
 });
 app.put('/post',uploadMiddleware.single('file'), async (req,res) => {
-     res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+   
   
   let newPath = null;
   if (req.file) {
@@ -164,11 +150,7 @@ app.put('/post',uploadMiddleware.single('file'), async (req,res) => {
 
 
 app.get('/post', async (req,res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+   
 
   
   res.json(
@@ -180,11 +162,7 @@ app.get('/post', async (req,res) => {
 });
 
 app.get('/post/:id', async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://myblog-client-eight.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+ 
 
 
   const {id} = req.params;
