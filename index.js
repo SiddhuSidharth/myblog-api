@@ -13,6 +13,7 @@ const fs = require('fs');
 
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdfe45we45w345wegw345werjktjwertkj';
+const port = process.env.PORT || 3001;
 
 app.use(cors({credentials:true,origin:'https://myblog-client-eight.vercel.app/'}));
 app.use(express.json());
@@ -138,4 +139,4 @@ app.get('/post/:id', async (req, res) => {
   res.json(postDoc);
 })
 
-app.listen('https://myblog-api-xjlk.onrender.com/');
+app.listen(port);
