@@ -14,8 +14,21 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdfe45we45w345wegw345werjktjwertkj';
 const port = process.env.PORT || 3001;
+var allowedOrigins = ['https://myblog-api-xjlk.onrender.com/',
+                      'https://myblog-client-eight.vercel.app/'];
 
-app.use(cors({credentials:true,origin:'https://myblog-client-eight.vercel.app/'}));
+app.use(cors({credentials:true,origin:function(origin, callback){
+    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
