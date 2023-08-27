@@ -77,14 +77,20 @@ app.post('/login', async (req,res) => {
   }
 });
 
-app.get('/profile', (req,res) => {
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token missing' });
+  }
+
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token invalid or expired' });
+    }
     
-  
-  // console.log("ReQ",req);
-  const {token} = req.cookies;
-  jwt.verify(token, secret, {}, (err,info) => {
-    if (err) throw err;
-    res.json("ERROR:",info);
+    // If the token is valid, you can use the decoded information
+    res.json(decoded);
   });
 });
 
