@@ -14,15 +14,15 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdfe45we45w345wegw345werjktjwertkj';
 const port = process.env.PORT || 3001;
-var allowedOrigins = ['https://myblog-api-xjlk.onrender.com',
-                      'https://myblog-client-eight.vercel.app'];
+// var allowedOrigins = 
 
 
-// app.use(cors({ origin:allowedOrigins, credentials: true }))
+// app.use(cors({ origin:allowedOrigins, credentials: true }));
 
 app.use(function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
-      const allowedOrigins = allowedOrigins;
+      const allowedOrigins = ['https://myblog-api-xjlk.onrender.com',
+                      'https://myblog-client-eight.vercel.app'];
       const origin = req.headers.origin;
       if (allowedOrigins.includes(origin)) {
            res.setHeader('Access-Control-Allow-Origin', origin);
